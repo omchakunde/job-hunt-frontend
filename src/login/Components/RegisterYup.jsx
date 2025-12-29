@@ -1,4 +1,3 @@
-// import axios from "axios";
 import { Field, Form, Formik } from "formik";
 import React, { useState } from "react";
 import * as Yup from "yup";
@@ -16,6 +15,11 @@ import {
   TextInput,
 } from "../../components/dashboard/ManageUsers/AddUsersFormik/fields/FieldInputs";
 import SpinnerComponent from "../../components/UI/SpinnerComponent";
+
+/* ✅ BACKEND BASE URL (WORKS FOR LOCAL + PRODUCTION) */
+const API_BASE_URL =
+  process.env.REACT_APP_SERVER_URL ||
+  "https://job-hunt-3-jqng.onrender.com";
 
 const Register = (props) => {
   const [showSpinner, setShowSpinner] = useState(false);
@@ -35,44 +39,42 @@ const Register = (props) => {
 
   const formSubmitHandler = (values, setSubmitting) => {
     setShowSpinner(true);
+
     axios
-      .post(`http://localhost:8080/auth/register`, { ...values })
+      .post(`${API_BASE_URL}/auth/register`, { ...values })
       .then((res) => {
         setShowSpinner(false);
+
         toast.success(res.data.message, {
           position: "top-right",
           autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
         });
+
         navigate("/login", { replace: true });
       })
       .catch((err) => {
         setShowSpinner(false);
+
         toast.error("Oops something went wrong", {
           position: "top-right",
           autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
         });
-        console.log(err);
+
+        console.error(err);
       });
   };
-  // const history = useHistory();
+
   return (
     <React.Fragment>
       <Header />
+
       <Container>
         <h1 className="p-3 text-center rounded" style={{ color: "#2c49ed" }}>
           Register
         </h1>
+
         {showSpinner && <SpinnerComponent />}
+
         <Row className="mb-5">
           <Col
             lg={7}
@@ -120,34 +122,38 @@ const Register = (props) => {
                         label="Name"
                         id="name"
                         name="name"
-                        mandatory={"true"}
+                        mandatory="true"
                       />
                     </div>
+
                     <div className={classes.formInputs}>
                       <TextInput
                         label="Email"
                         id="email"
                         name="email"
-                        mandatory={"true"}
+                        mandatory="true"
                       />
                     </div>
+
                     <div className={classes.formInputs}>
                       <TextInput
                         label="Password"
                         id="password"
                         type="password"
                         name="password"
-                        mandatory={"true"}
+                        mandatory="true"
                       />
                     </div>
+
                     <div className={classes.formInputs}>
                       <TextInput
                         label="Mobile No"
                         id="mobile"
                         name="mobile"
-                        mandatory={"true"}
+                        mandatory="true"
                       />
                     </div>
+
                     <div className={classes["formInputs__side"]}>
                       <div
                         className={`${classes["formInputs__side__inner"]} ${classes.age}`}
@@ -156,9 +162,10 @@ const Register = (props) => {
                           label="Age"
                           name="age"
                           id="age"
-                          mandatory={"true"}
+                          mandatory="true"
                         />
                       </div>
+
                       <div className={classes["formInputs__side__inner"]}>
                         <label>
                           Gender<span className="text-danger">*</span>
@@ -188,13 +195,14 @@ const Register = (props) => {
                         )}
                       </div>
                     </div>
+
                     <div className={classes["formInputs__side"]}>
                       <div className={classes["formInputs__side__inner"]}>
                         <SelectInput
                           name="qualification"
                           id="qualification"
                           label="Qualification"
-                          mandatory={"true"}
+                          mandatory="true"
                         >
                           <option value="">Select</option>
                           <option value="Post Graduate">Post Graduate</option>
@@ -203,6 +211,7 @@ const Register = (props) => {
                           <option value="High School">High School</option>
                         </SelectInput>
                       </div>
+
                       <div className={classes["formInputs__side__inner"]}>
                         <SelectInput
                           name="experience"
@@ -217,19 +226,21 @@ const Register = (props) => {
                         </SelectInput>
                       </div>
                     </div>
+
                     <div className={classes.formInputs}>
                       <SelectInput name="role" id="role" label="Role">
                         <option value="User">User</option>
                         <option value="Job Provider">Job Provider</option>
                       </SelectInput>
                     </div>
-                    <Button variant="success" type="submit" className="mt-4 ">
+
+                    <Button variant="success" type="submit" className="mt-4">
                       Register
                     </Button>
+
                     <Link to="/Login">
                       <Button
                         variant="primary"
-                        type="submit"
                         className="mt-4 float-end"
                         style={{ marginLeft: "10px" }}
                       >
