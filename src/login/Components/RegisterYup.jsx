@@ -40,7 +40,7 @@ const Register = () => {
     setShowSpinner(true);
 
     axios
-      .post(`${API_BASE_URL}/auth/signup`, values) // ✅ FIXED
+      .post(`${API_BASE_URL}/auth/register`, values)
       .then((res) => {
         setShowSpinner(false);
         toast.success(res.data.message);
@@ -68,13 +68,26 @@ const Register = () => {
             <Formik
               initialValues={initialValues}
               validationSchema={Yup.object({
-                name: Yup.string().min(4).required(),
-                email: Yup.string().email().required(),
-                password: Yup.string().min(6).required(),
-                mobile: Yup.string().length(10).required(),
-                age: Yup.number().min(18).max(60).required(),
-                gender: Yup.string().required(),
-                qualification: Yup.string().required(),
+                name: Yup.string()
+                  .min(4, "Minimum 4 characters")
+                  .required("Name is required"),
+                email: Yup.string()
+                  .email("Invalid email")
+                  .required("Email is required"),
+                password: Yup.string()
+                  .min(6, "Minimum 6 characters")
+                  .required("Password is required"),
+                mobile: Yup.string()
+                  .matches(/^[1-9][0-9]{9}$/, "Invalid mobile number")
+                  .required("Mobile is required"),
+                age: Yup.number()
+                  .min(18, "Minimum age 18")
+                  .max(60, "Maximum age 60")
+                  .required("Age is required"),
+                gender: Yup.string().required("Gender is required"),
+                qualification: Yup.string().required("Qualification is required"),
+                experience: Yup.string().required("Experience is required"),
+                role: Yup.string().required("Role is required"),
               })}
               onSubmit={formSubmitHandler}
             >
@@ -102,6 +115,7 @@ const Register = () => {
                   <option value="">Select</option>
                   <option value="0-2">0-2</option>
                   <option value="3-7">3-7</option>
+                  <option value="7-10">7-10</option>
                 </SelectInput>
 
                 <SelectInput name="role" label="Role">
